@@ -1,0 +1,64 @@
+{
+  "manifest_version": 3,
+  "name": "WatchSync",
+  "version": "1.1.0",
+  "description": "Watch Netflix, JioHotstar, YouTube and Prime Video together in real-time sync with chat and video call.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "*://*.netflix.com/*",
+    "*://*.hotstar.com/*",
+    "*://*.jiohotstar.com/*",
+    "*://*.youtube.com/*",
+    "*://*.primevideo.com/*",
+    "*://*.amazon.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.netflix.com/*"],
+      "js": ["content/shared.js", "content/netflix.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.hotstar.com/*", "*://*.jiohotstar.com/*"],
+      "js": ["content/shared.js", "content/hotstar.js"],
+      "run_at": "document_idle"
+    },
+    {
+  "matches": ["*://*.youtube.com/*"],
+  "js": ["content/shared.js", "content/youtube.js"],
+  "run_at": "document_idle"
+}
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "sidebar/sidebar.html",
+        "sidebar/sidebar.css",
+        "sidebar/sidebar.js"
+      ],
+      "matches": [
+        "*://*.netflix.com/*",
+        "*://*.hotstar.com/*",
+        "*://*.jiohotstar.com/*",
+        "*://*.youtube.com/*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WatchSync</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="header">
+    <h1>WatchSync</h1>
+  </div>
+
+  <div id="initial-view" class="view active">
+    <button id="btn-create" class="btn btn-primary">Create Room</button>
+    <div class="divider">
+      <span>OR</span>
+    </div>
+    <div class="input-group">
+      <input type="text" id="input-join" placeholder="Enter Room ID or Link">
+      <button id="btn-join" class="btn btn-secondary">Join Room</button>
+    </div>
+    <p id="error-msg" class="error hidden"></p>
+  </div>
+
+  <div id="room-view" class="view hidden">
+    <div class="status-badge" id="status-badge">Host</div>
+    <div class="room-info">
+      <p class="label">Room ID</p>
+      <h2 id="room-id-display">WS-XXXXXX</h2>
+      <button id="btn-copy" class="btn btn-outline">Copy Link</button>
+    </div>
+    
+    <div class="stats">
+      <div class="stat-box">
+        <span class="icon">👥</span>
+        <span id="participant-count">1</span>
+      </div>
+      <div class="stat-box" id="platform-icon">
+        🎬
+      </div>
+    </div>
+    
+    <button id="btn-leave" class="btn btn-danger">Leave Room</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
