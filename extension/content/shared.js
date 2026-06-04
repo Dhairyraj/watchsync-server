@@ -211,15 +211,63 @@ if (typeof window !== 'undefined') {
       
       // Make room for sidebar by padding body
       document.body.style.paddingRight = '300px';
+
+      // Hide toggle button if it exists
+      const btn = document.getElementById('watchsync-toggle-btn');
+      if (btn) btn.style.display = 'none';
     }
     
     // Inject automatically if we are in the main page (not inside another iframe)
     if (window === window.top) {
+      function createToggleButton() {
+        if (document.getElementById('watchsync-toggle-btn')) return;
+        const btn = document.createElement('div');
+        btn.id = 'watchsync-toggle-btn';
+        btn.innerHTML = '🎬';
+        btn.style.cssText = `
+          position: fixed;
+          top: 50%;
+          right: 0;
+          transform: translateY(-50%);
+          z-index: 2147483646;
+          background-color: #141414;
+          color: #E50914;
+          padding: 10px 12px;
+          border-radius: 8px 0 0 8px;
+          cursor: pointer;
+          box-shadow: -2px 0 5px rgba(0,0,0,0.5);
+          display: none;
+          font-size: 18px;
+        `;
+        document.body.appendChild(btn);
+
+        btn.addEventListener('click', () => {
+          injectSidebar();
+        });
+      }
+
       if (document.readyState === 'complete') {
         injectSidebar();
+        createToggleButton();
       } else {
-        window.addEventListener('load', injectSidebar);
+        window.addEventListener('load', () => {
+          injectSidebar();
+          createToggleButton();
+        });
       }
+      
+      // Listen for close sidebar message from the iframe
+      window.addEventListener('message', (event) => {
+        if (event.data && event.data.type === 'WATCHSYNC_CLOSE_SIDEBAR') {
+          const iframe = document.getElementById('watchsync-sidebar-iframe');
+          if (iframe) {
+            iframe.remove();
+            document.body.style.paddingRight = '0px';
+          }
+          const btn = document.getElementById('watchsync-toggle-btn');
+          if (btn) btn.style.display = 'block';
+        }
+      });
     }
   }
 }

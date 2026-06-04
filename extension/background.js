@@ -120,7 +120,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   else if (request.type === 'PLAYER_EVENT') {
-    if (roomState.isHost && roomState.connected) {
+    if (roomState.connected) {
       syncManager.emit('player_event', {
         roomId: roomState.roomId,
         type: request.event,

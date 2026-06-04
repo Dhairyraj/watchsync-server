@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // -- UI Interactions --
   toggleBtn.addEventListener('click', () => {
-    document.body.classList.toggle('collapsed');
+    window.parent.postMessage({ type: 'WATCHSYNC_CLOSE_SIDEBAR' }, '*');
   });
 
   participantsToggle.addEventListener('click', () => {

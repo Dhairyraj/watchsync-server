@@ -144,6 +144,10 @@ setInterval(() => {
   https.get('https://watchsync-server-n0dv.onrender.com');
 }, 10 * 60 * 1000);
 
+app.get('/', (req, res) => {
+  res.send('WatchSync server running');
+});
+
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Sync Server running on port ${PORT}`);

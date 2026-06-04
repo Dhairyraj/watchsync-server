@@ -1,13 +1,11 @@
 (function() {
-  // 1. Guard to prevent multiple injections
-  if (window.__watchSyncYouTube) return;
-  window.__watchSyncYouTube = true;
+  if (window.__watchSyncPrime) return;
+  window.__watchSyncPrime = true;
 
   let isSyncing = false;
   let syncTimeout = null;
   let videoElement = null;
 
-  // 5. Safe sendMessage wrapper to handle extension context invalidation
   function safeSendMessage(message) {
     try {
       if (chrome && chrome.runtime && chrome.runtime.sendMessage) {
@@ -19,10 +17,8 @@
   }
 
   function handlePlayerEvent(eventType) {
-    // 3. Prevent sync loops
     if (isSyncing || !videoElement) return;
     
-    // 6. Format required by specification
     safeSendMessage({
       type: 'PLAYER_EVENT',
       event: eventType,
@@ -31,22 +27,20 @@
   }
 
   function attachListeners(v) {
-    // 4. Attach play, pause, seeked event listeners
     v.addEventListener('play', () => handlePlayerEvent('play'));
     v.addEventListener('pause', () => handlePlayerEvent('pause'));
     v.addEventListener('seeked', () => handlePlayerEvent('seek'));
   }
 
   function initVideo(v) {
-    if (videoElement === v) return; // Already initialized this element
+    if (videoElement === v) return;
     videoElement = v;
     attachListeners(v);
-    console.log('[WatchSync] YouTube video initialized');
+    console.log('[WatchSync] Prime Video initialized');
   }
 
   function tryFindVideo() {
-    // 2. Find video element
-    const v = document.querySelector('video.html5-main-video') || document.querySelector('video');
+    const v = document.querySelector('video');
     if (v) {
       initVideo(v);
       return true;
@@ -54,19 +48,6 @@
     return false;
   }
 
-  // Detect video/URL changes
-  function handleUrlChange() {
-    safeSendMessage({
-      type: 'PLAYER_EVENT',
-      event: 'video_changed',
-      currentTime: window.location.href
-    });
-  }
-
-  window.addEventListener('popstate', handleUrlChange);
-  window.addEventListener('yt-navigate-finish', handleUrlChange);
-
-  // 8. MutationObserver fallback if video not found immediately
   if (!tryFindVideo()) {
     const observer = new MutationObserver((mutations) => {
       if (tryFindVideo()) {
@@ -76,17 +57,14 @@
     observer.observe(document.body, { childList: true, subtree: true });
   }
 
-  // 7. Listen for incoming sync
   try {
     if (chrome && chrome.runtime && chrome.runtime.onMessage) {
       chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         if (request.type === 'INCOMING_SYNC' && videoElement) {
           const data = request.data;
           
-          // Set flag before applying changes
           isSyncing = true;
           clearTimeout(syncTimeout);
-          // Reset to false after 500ms
           syncTimeout = setTimeout(() => { isSyncing = false; }, 500);
 
           try {

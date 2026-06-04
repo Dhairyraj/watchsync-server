@@ -44,6 +44,11 @@
   "matches": ["*://*.youtube.com/*"],
   "js": ["content/shared.js", "content/youtube.js"],
   "run_at": "document_idle"
+},
+{
+  "matches": ["*://*.primevideo.com/*", "*://*.amazon.com/*"],
+  "js": ["content/shared.js", "content/prime.js"],
+  "run_at": "document_idle"
 }
   ],
   "web_accessible_resources": [
@@ -57,7 +62,9 @@
         "*://*.netflix.com/*",
         "*://*.hotstar.com/*",
         "*://*.jiohotstar.com/*",
-        "*://*.youtube.com/*"
+        "*://*.youtube.com/*",
+        "*://*.primevideo.com/*",
+        "*://*.amazon.com/*"
       ]
     }
   ]
