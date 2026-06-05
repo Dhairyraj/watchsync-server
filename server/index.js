@@ -141,7 +141,7 @@ io.on('connection', (socket) => {
 
 const https = require('https');
 setInterval(() => {
-  https.get('https://watchsync-server-n0dv.onrender.com');
+  https.get('https://watchsync-server-1.onrender.com');
 }, 10 * 60 * 1000);
 
 app.get('/', (req, res) => {
